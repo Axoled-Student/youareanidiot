@@ -9,7 +9,9 @@ function reopen() {
   var popupWidth = 350;
   var popupHeight = 370;
   var left = Math.floor(Math.random() * Math.max(1, screen.width - popupWidth));
-  var top = Math.floor(Math.random() * Math.max(1, screen.height - popupHeight));
+  var topPosition = Math.floor(
+    Math.random() * Math.max(1, screen.height - popupHeight)
+  );
   window.open(
     "popup.html",
     "",
@@ -20,9 +22,12 @@ function reopen() {
       ",left=" +
       left +
       ",top=" +
-      top +
+      topPosition +
       ",titlebar=no,alwaysRaised=yes"
   );
+}
+function randomOffset() {
+  return (Math.floor(Math.random() * 7) + 1) * (Math.random() < 0.5 ? -5 : 5);
 }
 function spam() {
   for (var i = 0; i < 10; i++) {
@@ -78,8 +83,8 @@ function init() {
   }
   reopen();
 }
-var xOff = (Math.floor(Math.random() * 7) + 1) * (Math.random() < 0.5 ? -5 : 5),
-  yOff = (Math.floor(Math.random() * 7) + 1) * (Math.random() < 0.5 ? -5 : 5),
+var xOff = randomOffset(),
+  yOff = randomOffset(),
   xPos = Math.floor(Math.random() * Math.max(1, screen.width - 175)),
   yPos = Math.floor(Math.random() * Math.max(1, screen.height - 100)),
   flagRun = true;
