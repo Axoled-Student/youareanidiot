@@ -11,6 +11,11 @@ body {
     animation: flashing 1s infinite step-end;
 }
 
+img {
+    width: 100px;
+    height: 100px;
+}
+
 @keyframes flashing {
     0% {
         background-color: black;
