@@ -19,29 +19,47 @@ function spam() {
   return "You are an idiot!";
 }
 var audioBoostApplied = false;
+var audioRetryTimer = null;
+function playAudio(audio) {
+  if (!audio) return;
+  var p = audio.play();
+  if (p && typeof p.catch === "function") {
+    p.catch(function () {
+      if (audioRetryTimer) return;
+      audioRetryTimer = setTimeout(function () {
+        audioRetryTimer = null;
+        audio.play().catch(function () {});
+      }, 150);
+    });
+  }
+}
 function boostAudio() {
   var audio = document.getElementById("idiot-audio");
   if (!audio) return;
   audio.muted = false;
   audio.volume = 1.0;
   if (audioBoostApplied) {
-    audio.play().catch(function () {});
+    playAudio(audio);
     return;
   }
   audioBoostApplied = true;
   var AudioContextCtor = window.AudioContext || window.webkitAudioContext;
   if (AudioContextCtor) {
-    var audioCtx = new AudioContextCtor();
-    var source = audioCtx.createMediaElementSource(audio);
-    var gainNode = audioCtx.createGain();
-    gainNode.gain.value = 10.0;
-    source.connect(gainNode);
-    gainNode.connect(audioCtx.destination);
-    if (audioCtx.state === "suspended") {
-      audioCtx.resume().catch(function () {});
+    try {
+      var audioCtx = new AudioContextCtor();
+      var source = audioCtx.createMediaElementSource(audio);
+      var gainNode = audioCtx.createGain();
+      gainNode.gain.value = 10.0;
+      source.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+      if (audioCtx.state === "suspended") {
+        audioCtx.resume().catch(function () {});
+      }
+    } catch (e) {
+      audioBoostApplied = false;
     }
   }
-  audio.play().catch(function () {});
+  playAudio(audio);
 }
 function init() {
   document.body.onclick = function () {
