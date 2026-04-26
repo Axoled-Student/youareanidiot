@@ -20,30 +20,54 @@ function spam() {
 }
 var audioBoostApplied = false;
 function boostAudio() {
-  if (audioBoostApplied) return;
-  audioBoostApplied = true;
   var audio = document.getElementById("idiot-audio");
   if (!audio) return;
-  var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  var source = audioCtx.createMediaElementSource(audio);
-  var gainNode = audioCtx.createGain();
-  gainNode.gain.value = 10.0;
-  source.connect(gainNode);
-  gainNode.connect(audioCtx.destination);
-  if (audioCtx.state === "suspended") {
-    audioCtx.resume();
+  audio.muted = false;
+  audio.volume = 1.0;
+  if (audioBoostApplied) {
+    audio.play().catch(function () {});
+    return;
+  }
+  audioBoostApplied = true;
+  var AudioContextCtor = window.AudioContext || window.webkitAudioContext;
+  if (AudioContextCtor) {
+    var audioCtx = new AudioContextCtor();
+    var source = audioCtx.createMediaElementSource(audio);
+    var gainNode = audioCtx.createGain();
+    gainNode.gain.value = 10.0;
+    source.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+    if (audioCtx.state === "suspended") {
+      audioCtx.resume().catch(function () {});
+    }
   }
   audio.play().catch(function () {});
 }
 function init() {
-  document.body.onclick = function () { reopen(); boostAudio(); };
-  document.body.onmouseover = function () { reopen(); boostAudio(); };
-  document.body.onmousemove = function () { boostAudio(); };
-  window.onunload = spam;
-  window.onbeforeunload = spam;
+  document.body.onclick = function () {
+    reopen();
+    boostAudio();
+  };
+  document.body.onmouseover = function () {
+    reopen();
+    boostAudio();
+  };
+  document.body.onmousemove = function () {
+    boostAudio();
+  };
+  document.body.onpointerdown = function () {
+    boostAudio();
+  };
+  document.body.ontouchstart = function () {
+    boostAudio();
+  };
+  document.body.onkeydown = function () {
+    boostAudio();
+  };
+  boostAudio();
   playBall();
-  if (typeof bookmark === "function") {
-    bookmark();
+  if (typeof window.bookmark === "function") {
+    window.bookmark();
   }
   reopen();
   setTimeout(function () {
