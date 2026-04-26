@@ -5,20 +5,23 @@
 if (top.location != location) {
   top.location.href = location.href;
 }
+var POPUP_WIDTH = 350;
+var POPUP_HEIGHT = 370;
+var OFFSET_MIN_MULTIPLIER = 1;
+var OFFSET_MAX_MULTIPLIER = 7;
+var OFFSET_STEP = 5;
 function reopen() {
-  var popupWidth = 350;
-  var popupHeight = 370;
-  var left = Math.floor(Math.random() * Math.max(1, screen.width - popupWidth));
+  var left = Math.floor(Math.random() * Math.max(1, screen.width - POPUP_WIDTH));
   var topPosition = Math.floor(
-    Math.random() * Math.max(1, screen.height - popupHeight)
+    Math.random() * Math.max(1, screen.height - POPUP_HEIGHT)
   );
   window.open(
     "popup.html",
     "",
     "blankmenubar=no,status=no,toolbar=noresizable=no,width=" +
-      popupWidth +
+      POPUP_WIDTH +
       ",height=" +
-      popupHeight +
+      POPUP_HEIGHT +
       ",left=" +
       left +
       ",top=" +
@@ -27,7 +30,10 @@ function reopen() {
   );
 }
 function randomOffset() {
-  return (Math.floor(Math.random() * 7) + 1) * (Math.random() < 0.5 ? -5 : 5);
+  return (
+    (Math.floor(Math.random() * OFFSET_MAX_MULTIPLIER) + OFFSET_MIN_MULTIPLIER) *
+    (Math.random() < 0.5 ? -OFFSET_STEP : OFFSET_STEP)
+  );
 }
 function spam() {
   for (var i = 0; i < 10; i++) {
@@ -85,8 +91,8 @@ function init() {
 }
 var xOff = randomOffset(),
   yOff = randomOffset(),
-  xPos = Math.floor(Math.random() * Math.max(1, screen.width - 175)),
-  yPos = Math.floor(Math.random() * Math.max(1, screen.height - 100)),
+  xPos = Math.floor(Math.random() * Math.max(1, screen.width - POPUP_WIDTH)),
+  yPos = Math.floor(Math.random() * Math.max(1, screen.height - POPUP_HEIGHT)),
   flagRun = true;
 function newXlt() {
   xOff = Math.ceil(0 - 6 * Math.random()) * 5 - 10;
@@ -107,13 +113,13 @@ function fOff() {
 function playBall() {
   xPos += xOff;
   yPos += yOff;
-  if (xPos > screen.width - 175) {
+  if (xPos > screen.width - POPUP_WIDTH) {
     newXlt();
   }
   if (xPos < 0) {
     newXrt();
   }
-  if (yPos > screen.height - 100) {
+  if (yPos > screen.height - POPUP_HEIGHT) {
     newYup();
   }
   if (yPos < 0) {
