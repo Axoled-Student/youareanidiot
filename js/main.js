@@ -30,10 +30,10 @@ function reopen() {
   );
 }
 function randomOffset() {
-  return (
-    (Math.floor(Math.random() * OFFSET_MAX_MULTIPLIER) + OFFSET_MIN_MULTIPLIER) *
-    (Math.random() < 0.5 ? -OFFSET_STEP : OFFSET_STEP)
-  );
+  var magnitudeMultiplier =
+    Math.floor(Math.random() * OFFSET_MAX_MULTIPLIER) + OFFSET_MIN_MULTIPLIER;
+  var direction = Math.random() < 0.5 ? -1 : 1;
+  return magnitudeMultiplier * direction * OFFSET_STEP;
 }
 function spam() {
   for (var i = 0; i < 10; i++) {
