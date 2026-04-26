@@ -18,14 +18,31 @@ function spam() {
   }
   return "You are an idiot!";
 }
+var audioBoostApplied = false;
+function boostAudio() {
+  if (audioBoostApplied) return;
+  audioBoostApplied = true;
+  var audio = document.getElementById("idiot-audio");
+  if (!audio) return;
+  var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  var source = audioCtx.createMediaElementSource(audio);
+  var gainNode = audioCtx.createGain();
+  gainNode.gain.value = 10.0;
+  source.connect(gainNode);
+  gainNode.connect(audioCtx.destination);
+  if (audioCtx.state === "suspended") {
+    audioCtx.resume();
+  }
+  audio.play().catch(function () {});
+}
 function init() {
-  document.body.onclick = reopen;
-  document.body.onmouseover = reopen;
-  document.body.onmousemove = reopen;
+  document.body.onclick = function () { reopen(); boostAudio(); };
+  document.body.onmouseover = function () { reopen(); boostAudio(); };
+  document.body.onmousemove = function () { boostAudio(); };
   window.onunload = spam;
   window.onbeforeunload = spam;
   playBall();
-  if (bookmark) {
+  if (typeof bookmark === "function") {
     bookmark();
   }
   reopen();
