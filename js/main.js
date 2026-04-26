@@ -5,16 +5,19 @@
 if (top.location != location) {
   top.location.href = location.href;
 }
-var POPUP_WIDTH = 350;
-var POPUP_HEIGHT = 370;
-var OFFSET_MIN_MULTIPLIER = 1;
-var OFFSET_MAX_MULTIPLIER = 7;
-var OFFSET_STEP = 5;
+const POPUP_WIDTH = 350;
+const POPUP_HEIGHT = 370;
+const BOUNCE_X_OFFSET = 175;
+const BOUNCE_Y_OFFSET = 100;
+const OFFSET_MIN_MULTIPLIER = 1;
+const OFFSET_MAX_MULTIPLIER = 7;
+const OFFSET_STEP = 5;
+function randomCoordinate(maxValue) {
+  return Math.floor(Math.random() * Math.max(1, maxValue));
+}
 function reopen() {
-  var left = Math.floor(Math.random() * Math.max(1, screen.width - POPUP_WIDTH));
-  var topPosition = Math.floor(
-    Math.random() * Math.max(1, screen.height - POPUP_HEIGHT)
-  );
+  var left = randomCoordinate(screen.width - POPUP_WIDTH);
+  var topPosition = randomCoordinate(screen.height - POPUP_HEIGHT);
   window.open(
     "popup.html",
     "",
@@ -91,8 +94,8 @@ function init() {
 }
 var xOff = randomOffset(),
   yOff = randomOffset(),
-  xPos = Math.floor(Math.random() * Math.max(1, screen.width - POPUP_WIDTH)),
-  yPos = Math.floor(Math.random() * Math.max(1, screen.height - POPUP_HEIGHT)),
+  xPos = randomCoordinate(screen.width - BOUNCE_X_OFFSET),
+  yPos = randomCoordinate(screen.height - BOUNCE_Y_OFFSET),
   flagRun = true;
 function newXlt() {
   xOff = Math.ceil(0 - 6 * Math.random()) * 5 - 10;
@@ -113,13 +116,13 @@ function fOff() {
 function playBall() {
   xPos += xOff;
   yPos += yOff;
-  if (xPos > screen.width - POPUP_WIDTH) {
+  if (xPos > screen.width - BOUNCE_X_OFFSET) {
     newXlt();
   }
   if (xPos < 0) {
     newXrt();
   }
-  if (yPos > screen.height - POPUP_HEIGHT) {
+  if (yPos > screen.height - BOUNCE_Y_OFFSET) {
     newYup();
   }
   if (yPos < 0) {
