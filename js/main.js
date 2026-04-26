@@ -58,13 +58,9 @@ function init() {
   document.body.onpointerdown = function () {
     boostAudio();
   };
-  document.body.ontouchstart = function () {
-    boostAudio();
-  };
   document.body.onkeydown = function () {
     boostAudio();
   };
-  boostAudio();
   playBall();
   if (typeof window.bookmark === "function") {
     window.bookmark();
