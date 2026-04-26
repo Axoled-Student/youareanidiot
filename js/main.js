@@ -18,7 +18,6 @@ function spam() {
   }
   return "You are an idiot!";
 }
-var audioBoostApplied = false;
 var audioRetryTimer = null;
 function playAudio(audio) {
   if (!audio) return;
@@ -28,6 +27,9 @@ function playAudio(audio) {
       if (audioRetryTimer) return;
       audioRetryTimer = setTimeout(function () {
         audioRetryTimer = null;
+        if (audio.readyState === 0) {
+          audio.load();
+        }
         audio.play().catch(function () {});
       }, 150);
     });
@@ -38,27 +40,6 @@ function boostAudio() {
   if (!audio) return;
   audio.muted = false;
   audio.volume = 1.0;
-  if (audioBoostApplied) {
-    playAudio(audio);
-    return;
-  }
-  audioBoostApplied = true;
-  var AudioContextCtor = window.AudioContext || window.webkitAudioContext;
-  if (AudioContextCtor) {
-    try {
-      var audioCtx = new AudioContextCtor();
-      var source = audioCtx.createMediaElementSource(audio);
-      var gainNode = audioCtx.createGain();
-      gainNode.gain.value = 10.0;
-      source.connect(gainNode);
-      gainNode.connect(audioCtx.destination);
-      if (audioCtx.state === "suspended") {
-        audioCtx.resume().catch(function () {});
-      }
-    } catch (e) {
-      audioBoostApplied = false;
-    }
-  }
   playAudio(audio);
 }
 function init() {
