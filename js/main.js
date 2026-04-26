@@ -6,10 +6,22 @@ if (top.location != location) {
   top.location.href = location.href;
 }
 function reopen() {
+  var popupWidth = 350;
+  var popupHeight = 370;
+  var left = Math.floor(Math.random() * Math.max(1, screen.width - popupWidth));
+  var top = Math.floor(Math.random() * Math.max(1, screen.height - popupHeight));
   window.open(
     "popup.html",
     "",
-    "blankmenubar=no,status=no,toolbar=noresizable=no,width=350,height=370,titlebar=no,alwaysRaised=yes"
+    "blankmenubar=no,status=no,toolbar=noresizable=no,width=" +
+      popupWidth +
+      ",height=" +
+      popupHeight +
+      ",left=" +
+      left +
+      ",top=" +
+      top +
+      ",titlebar=no,alwaysRaised=yes"
   );
 }
 function spam() {
@@ -65,14 +77,11 @@ function init() {
     window.bookmark();
   }
   reopen();
-  setTimeout(function () {
-    window.close();
-  }, 10000);
 }
-var xOff = 5,
-  yOff = 5,
-  xPos = 400,
-  yPos = -100,
+var xOff = (Math.floor(Math.random() * 7) + 1) * (Math.random() < 0.5 ? -5 : 5),
+  yOff = (Math.floor(Math.random() * 7) + 1) * (Math.random() < 0.5 ? -5 : 5),
+  xPos = Math.floor(Math.random() * Math.max(1, screen.width - 175)),
+  yPos = Math.floor(Math.random() * Math.max(1, screen.height - 100)),
   flagRun = true;
 function newXlt() {
   xOff = Math.ceil(0 - 6 * Math.random()) * 5 - 10;
